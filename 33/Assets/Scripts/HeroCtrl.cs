@@ -46,10 +46,17 @@ public class HeroCtrl : MonoBehaviour
     public ClickMark m_ClickMark = null;
     //--- 마우스 클릭 이동 관련 변수 (Mouse Picking Move)
 
+
+    //## 애니메이션 처리 관련 변수
+    Anim_Sequence m_AnimSeq;
+    Quaternion m_CacRot;
+
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        m_AnimSeq = gameObject.GetComponentInChildren<Anim_Sequence>();
+        //차일드 중 첫번째로 나오는 Anim_Sequence 스크립트를 가져온다.
     }
 
     // Update is called once per frame
@@ -60,6 +67,10 @@ public class HeroCtrl : MonoBehaviour
         KeyBDUpdate();
         JoyStickMvUpdate();
         MousePickUpdate();
+
+
+        LimtiMove(); //지형 못벗어나게 처리
+
 
         //--- 총알 발사 코드
         if (0.0f < m_CacAtTick)
@@ -75,6 +86,31 @@ public class HeroCtrl : MonoBehaviour
             }
         }
         //--- 총알 발사 코드
+
+
+        //## 애니메이션 셋팅 처리
+
+
+        //### 조이스틱으로의 움직임과 키보드 움직임,마우스 클릭이동 마저 없을때의 처리
+        if (m_JoyMvLen <= 0.0f && h == 0.0f && v == 0.0f && m_bMoveOnOff == false)
+        {
+            m_AnimSeq.ChangeAniState(UnitState.Idle);
+        }
+        else
+        {
+            if(m_DirVec.magnitude <= 0) 
+                m_AnimSeq.ChangeAniState(UnitState.Idle);
+
+            else
+            {
+                //방향에 따른 애니메이션 처리 설정
+                m_CacRot = Quaternion.LookRotation(m_DirVec);
+                m_AnimSeq.CheckAnimDir(m_CacRot.eulerAngles.y);
+            }
+
+        }
+        
+
     }
 
 #region ---- 키보드 이동
@@ -195,7 +231,41 @@ public class HeroCtrl : MonoBehaviour
         }//if(m_bMoveOnOff == true)
     }// void MousePickUpdate()
 
-#endregion
+    #endregion
+
+
+
+    #region ##이동제한
+    //##이동제한 처리
+    void LimtiMove()
+    {
+        Vector3 pos = Camera.main.WorldToViewportPoint(transform.position);
+
+        //if(pos.x < 0.03f)  pos.x = 0.03f;
+
+        //if(pos.x > 0.97f) pos.x = 0.97f;
+        
+
+        //if(pos.y < 0.1f)  pos.y = 0.1f;
+
+        //if(pos.y > 0.95f)  pos.y = 0.95f;
+
+
+        pos.x = Mathf.Clamp(pos.x, 0.03f, 0.97f);
+        pos.y = Mathf.Clamp(pos.y, 0.07f, 0.89f);
+
+
+        Vector3 a_CacPos = Camera.main.ViewportToWorldPoint(pos);
+        a_CacPos.y = transform.position.y;
+
+        transform.position = a_CacPos;
+
+
+
+
+    }
+    #endregion
+
 
     public void Shoot_Fire(Vector3 a_Pos) //매개변수로 목표 지점을 받는다.
     {  // 클릭 이벤트가 발생했을 때 이 함수를 호출합니다.

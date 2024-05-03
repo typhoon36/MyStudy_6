@@ -2019,11 +2019,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0c1d9265b45b7945b45f3facb45c7fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Fnt_Idle: []
-  m_Front_Walk: []
-  m_Back_Walk: []
-  m_Left_Walk: []
-  m_Right_Walk: []
+  m_Fnt_Idle:
+  - {fileID: 2800000, guid: 3a3198cd5d319ae428afb07be04bbcbb, type: 3}
+  - {fileID: 2800000, guid: b47ab8e9ad3345640923300a31428b3c, type: 3}
+  m_Front_Walk:
+  - {fileID: 2800000, guid: 79d7c4b3829b3b147bdeb1bbc82ceb29, type: 3}
+  - {fileID: 2800000, guid: 75d13f9a65476984db172be5c95d0902, type: 3}
+  - {fileID: 2800000, guid: 91cce5df8f503b3448bc801353680cd3, type: 3}
+  - {fileID: 2800000, guid: b785395c67c219c40a9c86956c534a87, type: 3}
+  m_Back_Walk:
+  - {fileID: 2800000, guid: d1bd61de974f82745a4fdd231cf519e0, type: 3}
+  - {fileID: 2800000, guid: c993baf6d2d069c42a2718fe01ea0bcb, type: 3}
+  - {fileID: 2800000, guid: ae59666b01604ab43818cc6ce8a1b09d, type: 3}
+  - {fileID: 2800000, guid: ae59666b01604ab43818cc6ce8a1b09d, type: 3}
+  m_Left_Walk:
+  - {fileID: 2800000, guid: 66be1b2db88fe014496303963bf6a6a8, type: 3}
+  - {fileID: 2800000, guid: 89a0e5f39db7414428064b3f7cce5188, type: 3}
+  - {fileID: 2800000, guid: 08c06857e29e9e7439ae29dccddbdba9, type: 3}
+  - {fileID: 2800000, guid: ce602a778e2ec084c85b59bc311dc166, type: 3}
+  m_Right_Walk:
+  - {fileID: 2800000, guid: 3623bee73d7b0b140b9c507325e41e64, type: 3}
+  - {fileID: 2800000, guid: b51bcb8b1e97f5e43807bdc399168136, type: 3}
+  - {fileID: 2800000, guid: 61b8004fbd2b5c34d9d368b3023c9149, type: 3}
+  - {fileID: 2800000, guid: a929bbb3f45a2174d84124b8c1b0dc68, type: 3}
 --- !u!1 &892919362
 GameObject:
   m_ObjectHideFlags: 0

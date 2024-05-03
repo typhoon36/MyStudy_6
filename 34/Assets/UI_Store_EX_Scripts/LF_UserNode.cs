@@ -39,7 +39,7 @@ public class LF_UserNode : MonoBehaviour
     //## 버튼 선택시 선택 상태 표시 
     private void OnClickMethod()
     {
-        m_IsSelected = !m_IsSelected;
+        m_IsSelected =!m_IsSelected;
         if(m_SelectImg != null)
         {
             m_SelectImg.gameObject.SetActive(m_IsSelected);

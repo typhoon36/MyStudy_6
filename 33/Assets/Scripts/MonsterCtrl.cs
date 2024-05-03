@@ -67,7 +67,7 @@ public class MonsterCtrl : MonoBehaviour
     //기본 스폰 위치(기준점)
 
     bool m_bMvPtOnOff = false;
-   //패트롤 온오프
+    //패트롤 온오프
 
     float m_WaitTime = 0.0f;
 
@@ -87,7 +87,7 @@ public class MonsterCtrl : MonoBehaviour
     //목표점까지 이동하는데 걸리는 시간
 
     Quaternion a_CacPtRot;
-    
+
 
     Vector3 a_CacPtAngle = Vector3.zero;
 
@@ -114,15 +114,15 @@ public class MonsterCtrl : MonoBehaviour
     {
         if (Coll.gameObject.name.Contains("BulletPrefab") == true)
         {
-           // if (Coll.gameObject.GetComponent<BulletCtrl>().m_AllyType == AllyType.BT_Enermy)
-            if(Coll.gameObject.CompareTag (AllyType.BT_Enermy.ToString())== true)
+            // if (Coll.gameObject.GetComponent<BulletCtrl>().m_AllyType == AllyType.BT_Enermy)
+            if (Coll.gameObject.CompareTag(AllyType.BT_Enermy.ToString())== true)
                 return; //아군의 총알이면 무시
 
-            
-                TakeDamage(10.0f);
 
-                Destroy(Coll.gameObject);
-            
+            TakeDamage(10.0f);
+
+            Destroy(Coll.gameObject);
+
         }
     }// void OnTriggerEnter(Collider Coll)
 
@@ -148,6 +148,7 @@ public class MonsterCtrl : MonoBehaviour
         if (m_CurHp <= 0.0f)  //몬스터 사망 처리
         {
             // 보상
+            ItemDrop();
 
             Destroy(gameObject);
         }
@@ -228,7 +229,7 @@ public class MonsterCtrl : MonoBehaviour
         {
             if (m_AggroTarget == null)
             {
-                m_AiState = MonAiState.MAI_Patrol;   
+                m_AiState = MonAiState.MAI_Patrol;
             }
 
             a_CacVLen = m_AggroTarget.transform.position
@@ -238,7 +239,7 @@ public class MonsterCtrl : MonoBehaviour
             a_CacDist = a_CacVLen.magnitude;
 
             //## 공격거리 안에 들어오면 공격상태로 전환
-            if(a_CacDist < m_AttackDist)
+            if (a_CacDist < m_AttackDist)
             {
                 m_AiState = MonAiState.MAI_Attack;
 
@@ -249,17 +250,17 @@ public class MonsterCtrl : MonoBehaviour
                 m_MoveDir = a_CacVLen.normalized;
                 m_MoveDir.y = 0.0f;
                 m_NowStep = m_MoveVelocity * 10.0f * Time.deltaTime;
-               
+
 
                 transform.Translate(m_MoveDir * m_NowStep, Space.World);
 
 
             }
-            
+
 
         }
 
-        
+
 
         //## 공격상태
         else if (m_AiState == MonAiState.MAI_Attack)
@@ -301,16 +302,16 @@ public class MonsterCtrl : MonoBehaviour
 
     }//  void MonsterAI()
 
-    void AI_Patrol() 
+    void AI_Patrol()
     {
-        if(m_bMvPtOnOff == true)
+        if (m_bMvPtOnOff == true)
         {
             m_DirMvVec = m_PatrolTarget - this.transform.position;
             m_DirMvVec.y = 0.0f;
             m_DirMvVec.Normalize();
 
             m_AddTimeCount += Time.deltaTime;
-            if(m_MoveDurTime <= m_AddTimeCount)
+            if (m_MoveDurTime <= m_AddTimeCount)
                 m_bMvPtOnOff = false; //목표지점에 도착했으면 이동 중지
             else
             {
@@ -321,7 +322,7 @@ public class MonsterCtrl : MonoBehaviour
         else
         {
             m_WaitTime -= Time.deltaTime;
-            if(0.0f < m_WaitTime)
+            if (0.0f < m_WaitTime)
             {
                 return;
             }
@@ -333,12 +334,12 @@ public class MonsterCtrl : MonoBehaviour
             m_DirMvVec = transform.position - m_BasePos;
             m_DirMvVec.y = 0.0f;
 
-           if(m_DirMvVec.magnitude < 1.0f)
+            if (m_DirMvVec.magnitude < 1.0f)
                 a_CacPtRot = Quaternion.LookRotation(transform.forward);
-           else 
+            else
                 a_CacPtRot = Quaternion.LookRotation(m_DirMvVec);
 
-           a_CacPtAngle = a_CacPtRot.eulerAngles;
+            a_CacPtAngle = a_CacPtRot.eulerAngles;
             a_CacPtAngle.y += a_CacPtAngle.y + (float)a_AngleRan;
             a_CacPtRot.eulerAngles = a_CacPtAngle;
 
@@ -353,12 +354,12 @@ public class MonsterCtrl : MonoBehaviour
 
             m_DirMvVec = m_PatrolTarget - this.transform.position;
             m_DirMvVec.y = 0.0f;
-           
+
 
             m_MoveDurTime = m_DirMvVec.magnitude / m_MoveVelocity;
             //목표지점까지 이동하는데 걸리는 시간 계산
 
- 
+
             m_AddTimeCount = 0.0f;
 
             m_DirMvVec.Normalize();
@@ -392,7 +393,45 @@ public class MonsterCtrl : MonoBehaviour
 
         a_BulletSc.BulletSpawn(transform.position, a_CacVLen, 30.0f);
 
-                      
+
 
     }
+
+    public void ItemDrop()
+    {
+        int a_Rnd = Random.Range(0, 6);
+
+        GameObject a_Item = null;
+        a_Item  = (GameObject)Instantiate(Resources.Load("Item_Obj"));
+        a_Item.transform.position = new Vector3(transform.position.x, 0.7f,
+           transform.position.z);
+
+        if (a_Rnd == 0)
+        {
+            a_Item.name = "coin_Item_Obj";
+        }
+        else if (a_Rnd == 1)
+        {
+            a_Item.name = "bomb_Item_Obj";
+        }
+        else
+        {
+            Item_Type a_ItType = (Item_Type)a_Rnd;
+            a_Item.name = a_ItType.ToString() + "_Item_Obj";
+        }
+
+
+        ItemObjInfo a_RefItmeInfo = a_Item.GetComponent<ItemObjInfo>();
+        if (a_RefItmeInfo != null)
+        {
+            a_RefItmeInfo.InitItem((Item_Type)a_Rnd, a_Item.name,
+                Random.Range(1, 6), Random.Range(1, 6));
+        }
+
+
+
+    }
+
+
+
 }

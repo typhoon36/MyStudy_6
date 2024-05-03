@@ -44,6 +44,22 @@ public class Game_Mgr : MonoBehaviour
     Vector3 dirStick;
     //--- Flexible JoyStick 처리 부분
 
+
+    //## 인벤토리 스크롤뷰
+    [Header("--- Inventory ScrollView OnOff---")]
+    public Button m_Inven_Btn = null;
+    public Transform m_InvenScrollTr = null;
+    bool m_Inven_ScIsOn = false;
+    float m_ScSpeed = 1800.0f;
+    Vector3 m_ScOnPos = new Vector3(0.0f, 0.0f, 0.0f);
+    Vector3 m_ScOffPos = new Vector3(320.0f, 0.0f, 0.0f);
+
+
+    public Transform m_MkInvenContent = null;
+    public GameObject m_MkInvenNode = null;
+    public Button m_ItemSell_Btn = null;
+
+
     //--- 머리위에 데미지 띄우기용 변수 선언
     Vector3 m_StCacPos = Vector3.zero;
     [Header("--- Damage Text ---")]
@@ -165,12 +181,23 @@ public class Game_Mgr : MonoBehaviour
 
 #endregion
 
+
+       //## 인벤토리 판넬 Onoff
+
+        if(m_Inven_Btn !=null)
+            m_Inven_Btn.onClick.AddListener(() =>
+            {
+                m_Inven_ScIsOn = !m_Inven_ScIsOn;
+              
+            });
+
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        InvenScOnOffUpdate();
     }
 
 #region --- Fixed Joystick 처리 부분
@@ -342,5 +369,35 @@ public class Game_Mgr : MonoBehaviour
         return (0 < results.Count);
 #endif
     }//public bool IsPointerOverUIObject() 
+
+    //인벤토리 판넬 OnOff 처리 함수
+    void InvenScOnOffUpdate()
+    {
+        if(m_InvenScrollTr == null)
+            return;
+
+        if (m_Inven_ScIsOn == false)
+        {
+           
+            if(m_InvenScrollTr.localPosition.x < m_ScOffPos.x)
+            {
+                m_InvenScrollTr.localPosition = Vector3.MoveTowards(m_InvenScrollTr.localPosition,
+                                                                                       m_ScOffPos, m_ScSpeed * Time.deltaTime);
+            }
+            else
+            {
+                if (m_InvenScrollTr.localPosition.x != m_ScOffPos.x)
+                {
+                    m_InvenScrollTr.localPosition = Vector3.MoveTowards(m_InvenScrollTr.localPosition,
+                                                                                                                  m_ScOffPos, m_ScSpeed * Time.deltaTime);
+
+                }
+            }
+
+
+        }
+    }
+
+
 
 }//public class Game_Mgr : MonoBehaviour
